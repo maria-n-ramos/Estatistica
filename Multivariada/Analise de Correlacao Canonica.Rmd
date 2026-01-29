@@ -1,0 +1,353 @@
+---
+title: "Análise de Correlação Canônica"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Pacotes usados:
+```{r,eval=FALSE}
+# Carregar pacotes necessários
+library(readr)
+library(CCA)
+library(CCP)
+```
+
+## Questão 1
+
+Definição dos dados:
+
+
+```{r}
+data <- data.frame(
+  Pessoa = 1:46,
+  y1 = c(0.81, 0.95, 0.94, 1.04, 1.00, 0.76, 0.91, 1.10, 0.99, 0.78, 0.90, 0.73, 0.96, 0.84, 0.74, 0.98, 1.10, 0.85, 0.83, 0.93, 0.95, 0.74, 0.95, 0.97, 0.72, 1.11, 1.20, 1.13, 1.00, 0.78, 1.00, 1.00, 0.71, 0.76, 0.89, 0.88, 1.17, 0.85, 0.97, 1.00, 1.00, 0.89, 0.98, 0.78, 0.74, 0.91),
+  y2 = c(80, 97, 105, 90, 90, 86, 100, 85, 97, 97, 91, 87, 78, 90, 86, 80, 90, 99, 85, 90, 90, 88, 95, 90, 92, 74, 98, 100, 86, 98, 70, 99, 75, 90, 85, 99, 100, 78, 106, 98, 102, 90, 94, 80, 93, 86),
+  x1 = c(356, 289, 319, 356, 323, 381, 350, 301, 379, 296, 353, 306, 290, 371, 312, 393, 364, 359, 296, 345, 378, 304, 347, 327, 386, 365, 365, 352, 325, 321, 360, 336, 352, 353, 373, 376, 367, 335, 396, 277, 378, 360, 291, 269, 318, 328),
+  x2 = c(124, 117, 143, 199, 240, 157, 221, 186, 142, 131, 221, 178, 136, 200, 208, 202, 152, 185, 116, 123, 136, 134, 184, 192, 279, 228, 145, 172, 179, 222, 134, 143, 169, 263, 174, 134, 182, 241, 128, 222, 165, 282, 94, 121, 73, 106),
+  x3 = c(55, 76, 105, 108, 143, 165, 119, 105, 98, 94, 53, 66, 142, 93, 68, 102, 76, 37, 60, 50, 47, 50, 91, 124, 74, 235, 158, 140, 145, 99, 90, 105, 32, 165, 78, 80, 54, 175, 80, 186, 117, 160, 71, 29, 42, 56)
+)
+
+X <- data[, c("x1", "x2", "x3")]  # Variáveis do grupo 1
+Y <- data[, c("y1", "y2")]        # Variáveis do grupo 2
+
+```
+
+
+Realizar a acc:
+
+
+```{r}
+cc <- CCA::cc(X, Y)
+
+xcoef <- cc$xcoef
+ycoef <- cc$ycoef
+
+stdcoef_X <- CCA::comput(X, Y, cc)$coef$xscores;stdcoef_X
+stdcoef_Y <- CCA::comput(X, Y, cc)$coef$yscores;stdcoef_Y
+summary(cc)
+```
+
+###### Foram calculados também os coeficientes canônicos padronizados, de modo a eliminar o efeito das diferentes escalas das variáveis. Esses coeficientes permitem interpretar corretamente quais variáveis contribuem mais para cada variável canônica.
+
+### As correlações canônicas entre (y1, y2) e (x1, x2, x3):
+
+```{r}
+v.ca <- cc$cor
+v.ca
+```
+
+## Os coeficientes:
+
+
+```{r}
+xcoef <- cc$xcoef
+ycoef <- cc$ycoef
+```
+
+
+##### Primeiro par de variáveis canônicas
+
+
+```{r,echo=FALSE}
+cat("x1:", xcoef[1, 1], "contribuição negativa\n")
+cat("x2:", xcoef[2, 1], "contribuição positiva\n")
+cat("x3:", xcoef[3, 1], "contribuição negativa\n")
+cat("\n")
+
+cat("y1:", ycoef[1, 1], "contribuição negativa significativa\n")
+cat("y2:", ycoef[2, 1], "contribuição positiva muito pequena\n")
+cat("\n")
+```
+
+##### Segundo par de variáveis canônicas
+
+```{r,echo=FALSE}
+cat("x1:", xcoef[1, 2], "contribuição positiva\n")
+cat("x2:", xcoef[2, 2], "contribuição negativa\n")
+cat("x3:", xcoef[3, 2], "contribuição negativa\n")
+cat("\n")
+
+cat("y1:", ycoef[1, 2], "contribuição negativa moderada\n")
+cat("y2:", ycoef[2, 2], "contribuição positiva moderada\n")
+```
+
+
+
+##### As primeiras variáveis canônicas são medidas medianas resumidas de seus respectivos conjuntos de variáveis, pois a força da relação linear das combinações do primeiro conjunto é 0,51, um valor moderado. O segundo par (Y) possui relação fraca de combinações lineares entre seu grupo com uma correlação de 0,13. Podemos ver visualmente pelo gráfico da dimensão abaixo:
+
+```{r}
+barplot(v.ca, xlab = "Dimensão", ylab = "Correlação canônica", names.arg = 1:length(v.ca), ylim = c(0, 1))
+```
+
+
+### Testar a significância das correlações
+
+```{r}
+
+n <- nrow(X)
+p <- ncol(X)
+q <- ncol(Y)
+rho <- cc$cor
+
+wilks_test <- CCP::p.asym(rho, n, p, q, tstat = "Wilks")
+pillai_test <- CCP::p.asym(rho, n, p, q, tstat = "Pillai")
+hotelling_test <- CCP::p.asym(rho, n, p, q, tstat = "Hotelling")
+roy_test <- CCP::p.asym(rho, n, p, q, tstat = "Roy")
+
+# Exibir testes
+#wilks_test
+#pillai_test
+#hotelling_test
+#roy_test
+
+fim <- data.frame(
+  Test = c("Wilks' Lambda", "Pillai-Bartlett Trace", "Hotelling-Lawley Trace", "Roy's Largest Root"),
+  `Primeira CC` = c(ifelse(wilks_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                                     ifelse(pillai_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                                     ifelse(hotelling_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                                     ifelse(roy_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0")),
+  `Segunda CC` = c(ifelse(wilks_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                                    ifelse(pillai_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                                    ifelse(hotelling_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                                    ifelse(length(roy_test$p.value) > 1 && roy_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"))
+)
+fim
+```
+
+##### Conclui-se que apenas a primeira correlação canônica é estatisticamente significativa, enquanto a segunda não é
+
+
+### Correlações das variáveis canônicas com as variáveis originais
+
+
+```{r}
+cargas <- CCA::comput(X, Y, cc)
+```
+
+```{r,echo=FALSE,eval=FALSE}
+cargas$corr.X.xscores
+cargas$corr.Y.xscores
+cargas$corr.X.yscores
+cargas$corr.Y.yscores
+```
+
+
+```{r,echo=FALSE}
+
+corr_cargas <- data.frame(
+  Variavel_Original = c("x1 (glicemia)", "x2 (glicemia)", "x3 (níveis de insulina)",
+                        "y1 (peso relativo)", "y2 (glicemia)",
+                        "x1 (glicemia)", "x2 (glicemia)", "x3 (níveis de insulina)",
+                        "y1 (peso relativo)", "y2 (glicemia)",
+                        "x1 (glicemia)", "x2 (glicemia)", "x3 (níveis de insulina)",
+                        "y1 (peso relativo)", "y2 (glicemia)",
+                        "y1 (peso relativo)", "y2 (glicemia)"),
+  Variavel_Canonica = c("Primeira canônica de X", "Primeira canônica de X", "Primeira canônica de X",
+                        "Primeira canônica de X", "Primeira canônica de X",
+                        "Segunda canônica de X", "Segunda canônica de X", "Segunda canônica de X",
+                        "Primeira canônica de Y", "Primeira canônica de Y",
+                        "Segunda canônica de Y", "Segunda canônica de Y", "Segunda canônica de Y",
+                        "Primeira canônica de Y", "Primeira canônica de Y",
+                        "Segunda canônica de Y", "Segunda canônica de Y"),
+  Correlacao = c(-0.33990380, 0.05020193, -0.75515753,
+                 -0.50789526, -0.02403393,
+                 0.6837208, -0.4565518, -0.5730267,
+                 0.01959833, 0.12535099,
+                 -0.17478024, 0.08579885, -0.38830578,
+                 -0.98772912, 0.1561768,
+                 -0.04673998, 0.9989071),
+  Forca = c("Não forte", "Não forte", "Forte",
+            "Não forte", "Não forte",
+            "Forte", "Não forte", "Não forte",
+            "Não forte", "Não forte",
+            "Não forte", "Não forte", "Não forte",
+            "Muito forte", "Não forte",
+            "Não forte", "Muito forte")
+)
+
+corr_cargas
+
+```
+
+
+##### Com base nessas correlações, observamos que a variável x3 (níveis de insulina) tem uma correlação negativa forte com a primeira variável canônica de X, enquanto y1 (peso relativo) e y2 (glicemia) têm correlações muito fortes com a primeira e segunda variáveis canônicas de Y, respectivamente.
+
+
+```{r}
+pvte.u <- (colSums((cargas$corr.X.xscores)^2)) / (dim(X)[2]) * 100
+pvte.v <- (colSums((cargas$corr.Y.yscores)^2)) / (dim(Y)[2]) * 100
+
+pvte.u
+pvte.v
+```
+#### Para o conjunto X:
+
+
+##### A primeira variável canônica de X explica 22.94% da variância total das variáveis de X.
+
+
+##### A segunda variável canônica de X explica 33.48% da variância total das variáveis de X.
+
+
+\n
+#### Para o conjunto Y:
+
+
+##### A primeira variável canônica de Y explica 48.89% da variância total das variáveis de Y.
+
+
+##### A segunda variável canônica de Y explica 51.11% da variância total das variáveis de Y.
+
+
+
+## Questão 2
+
+Importação dos dados:
+
+```{r}
+library(readr)
+dados <- read_delim("T7-7.dat", delim = "\t", col_names = FALSE,show_col_types = FALSE)
+X <- dados[, 1:4]
+Z <- dados[, 5:8]
+```
+
+#### As variáveis canônicas padronizadas da amostra e suas correlações:
+
+```{r}
+# Padronizar
+X_std <- scale(X)
+Z_std <- scale(Z)
+
+cc <- CCA::cc(X_std, Z_std)
+
+cc$xcoef
+cc$ycoef
+
+cargas <- CCA::comput(X_std, Z_std, cc)
+
+variaveis_canonicas_X <- cargas$corr.X.xscores
+variaveis_canonicas_Z <- cargas$corr.Y.xscores
+
+pvte.u <- (colSums((cargas$corr.X.xscores)^2)) / ncol(X) * 100
+pvte.v <- (colSums((cargas$corr.Y.yscores)^2)) / ncol(Z) * 100
+
+
+variaveis_canonicas_X <- cargas$corr.X.xscores;variaveis_canonicas_X
+variaveis_canonicas_Z <- cargas$corr.Y.xscores;variaveis_canonicas_Z
+```
+
+#### Além das cargas canônicas, foram exibidos os coeficientes canônicos brutos e padronizados. Os coeficientes padronizados permitem identificar diretamente quais variáveis originais mais contribuem para a formação das variáveis canônicas, eliminando o efeito da escala de medição.
+
+##### Só a primeira coluna apresenta valores de correlações fortes, mostrando que as primeiras variáveis canônicas de X e Z têm correlações fortes com as variáveis originais. As demais são fracas ou moderadas. 
+
+
+```{r}
+
+pvte.u <- (colSums((cargas$corr.X.xscores)^2)) / (dim(X)[2]) * 100
+pvte.v <- (colSums((cargas$corr.Y.yscores)^2)) / (dim(Z)[2]) * 100
+
+pvte.u
+pvte.v
+```
+#### As primeiras variáveis canônicas (U1 e V1) têm correlações forte a moderada com a maioria das variáveis originais, além disso, a primeira variável canônica (U1) explica 88.02% da variância total das variáveis de X, e a primeira variável canônica (V1) e a terceira variável canônica (V3) explicam 85.48% da variância total das variáveis de Z. 
+##### Portanto, U1 é uma boa medida resumida para o conjunto X e V1 e V3 para o Z.
+
+### Testar a significância
+
+```{r}
+n <- nrow(X)
+p <- ncol(X)
+q <- ncol(Z)
+rho <- cc$cor
+
+
+wilks_test <- CCP::p.asym(rho, n, p, q, tstat = "Wilks")
+pillai_test <- CCP::p.asym(rho, n, p, q, tstat = "Pillai")
+hotelling_test <- CCP::p.asym(rho, n, p, q, tstat = "Hotelling")
+roy_test <- CCP::p.asym(rho, n, p, q, tstat = "Roy")
+```
+
+
+
+```{r}
+fim <- data.frame(
+  Test = c("Wilks' Lambda", "Pillai-Bartlett Trace", "Hotelling-Lawley Trace", "Roy's Largest Root"),
+  `Primeira CC` = c(ifelse(wilks_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                    ifelse(pillai_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                    ifelse(hotelling_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                    ifelse(roy_test$p.value[1] < 0.05, "Rejeita H0", "Não Rejeita H0")),
+  `Segunda CC` = c(ifelse(wilks_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                   ifelse(pillai_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                   ifelse(hotelling_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0"),
+                   ifelse(length(roy_test$p.value) > 1 && roy_test$p.value[2] < 0.05, "Rejeita H0", "Não Rejeita H0")),
+  `Terceira CC` = c(ifelse(wilks_test$p.value[3] < 0.05, "Não Rejeita H0", "Não Rejeita H0"),
+                    ifelse(pillai_test$p.value[3] < 0.05, "Não Rejeita H0", "Não Rejeita H0"),
+                    ifelse(hotelling_test$p.value[3] < 0.05, "Não Rejeita H0", "Não Rejeita H0"),
+                    ifelse(length(roy_test$p.value) > 2 && roy_test$p.value[3] < 0.05, "Não Rejeita H0", "Não Rejeita H0")),
+  `Quarta CC` = c(ifelse(wilks_test$p.value[4] < 0.05, "Não Rejeita H0", "Não Rejeita H0"),
+                  ifelse(pillai_test$p.value[4] < 0.05, "Não Rejeita H0", "Não Rejeita H0"),
+                  ifelse(hotelling_test$p.value[4] < 0.05, "Não Rejeita H0", "Não Rejeita H0"),
+                  ifelse(length(roy_test$p.value) > 3 && roy_test$p.value[4] < 0.05, "Não Rejeita H0", "Não Rejeita H0"))
+)
+fim
+```
+
+##### As análises indicam que as duas primeiras correlações canônicas são significativas e suficientes para descrever a relação canônica entre os conjuntos de variáveis X e Z. Aconclusão anterior sobre Z não é mais válida, apenas as duas primeiras variáveis canônicas devem ser consideradas na interpretação, pois são estatisticamente significativas. Assim, V1 explica 69.79% da variância do conjunto Z e V2 explica 8.43%, totalizando 78.22% da variância explicada pelas dimensões interpretáveis.No conjunto X, U1 explica 88,02% da variância total e U2 explica 5,51%, totalizando 93,53% da variância explicada pelas dimensões interpretáveis. Portanto, a relação entre os conjuntos é predominantemente descrita pela primeira dimensão canônica, sendo a segunda de contribuição secundária.
+
+##### Sabendo que:
+
+x1 = comprimento de ruptura
+
+
+x2 = módulo de elasticidade
+
+
+x3 = estresse na falha
+
+
+x4 = resistência ao estouro
+
+
+x5 = comprimento aritmético da bra
+
+
+x6 = fração de bra longa
+
+
+x7 = fração de bra na
+
+
+x8 = tração com vão zero
+
+##### Podemos interpretar da seguinte forma as variáveis canônicas signicativas:
+
+##### U1 e V1: Mostram que quando as propriedades mecânicas do papel (comprimento de ruptura, módulo de elasticidade, estresse na falha e resistência ao estouro) diminuem, o comprimento aritmético da fibra, a fração de fibra longa e a tração com vão zero também diminuem. A fração de fibra fina, porém, aumenta um pouco.
+
+##### U2 e V2: Mostram que o módulo de elasticidade do papel é a principal variável afetada em U2. Já em V2, o comprimento aritmético da fibra e a fração de fibra longa são as principais variáveis influenciadas.
