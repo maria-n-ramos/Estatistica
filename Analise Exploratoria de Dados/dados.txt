@@ -1,0 +1,16 @@
+Id	SB	Idade	Altura(m)	Peso(kg)	Filhos	FumaCigarro	ToleranciaCigarro
+1	Feminino	23	1.62	82	0	nao	Indiferente
+2	Feminino	27	1.57	56	1	nao	Incomoda pouco
+3	Masculino	34	1.84	123	0	nao	Incomoda muito
+4	Feminino	19	1.69	100	0	nao	Incomoda pouco
+5	Masculino	20	1.67	67	0	nao	Indiferente
+6	Masculino	26	1.68	56	0	nao	Indiferente
+7	Feminino	20	1.6	51	0	nao	Incomoda muito
+8	Masculino	20	1.78	95	0	nao	Incomoda pouco
+9	Masculino	23	1.6	64	0	nao	Incomoda muito
+10	Masculino	29	1.85	99	0	nao	Incomoda pouco
+11	Masculino	24	1.85	95	0	nao	Indiferente
+12	Feminino	19	1.65	52	0	nao	Incomoda muito
+13	Masculino	30	1.7	57	0	nao	Incomoda pouco
+14	Feminino	20	1.53	60	0	nao	Indiferente
+15	Masculino	21	1.63	51		nao	Incomoda pouco
