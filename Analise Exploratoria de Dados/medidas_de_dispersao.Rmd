@@ -1,0 +1,106 @@
+---
+title: "Atividade 7"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require("prettyR")
+```
+
+### Questão 1 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+attach(iris)
+require("fdth")
+```
+
+#### Sepal Lenght
+```{r,error=T}
+var=var(Sepal.Length)
+cat("A variância do comprimento das sépalas é de",round(var,2),".")
+sd=sd(Sepal.Length)
+cat("O desvio-padrão do comprimento das Sépalas é de",round(sd,2),".")
+cv = var/mean(Sepal.Length)*100
+cat("O coeficiente de variação do comprimento das Sépalas é de",round(cv,2),", sendo classificado como médio.")
+```
+
+
+#### Sepal Width
+```{r,error=T}
+mean=mean(Sepal.Width)
+var=var(Sepal.Width)
+cat("A variância da largura das sépalas é de",round(var,2),".")
+sd=sd(Sepal.Width)
+cat("O desvio-padrão da largura das sépalas é de",round(sd,2),".")
+cv = var/mean*100
+cat("O coeficiente de variação da largura das sépalas é de",round(cv,2),", sendo classificado como baixo.")
+```
+
+
+#### Petal Lenght
+```{r,error=T}
+mean=mean(Petal.Length)
+var=var(Petal.Length)
+cat("A variância do comprimento das pétalas é de",round(var,2),".")
+sd=sd(Petal.Length)
+cat("O desvio-padrão do comprimento das pétalas é de",round(sd,2),".")
+cv = var/mean*100
+cat("O coeficiente de variação do comprimento das pétalas é de",round(cv,2),", sendo classificado como muito alto.")
+```
+
+
+#### Petal Width
+```{r,error=T}
+mean=mean(Petal.Width)
+var=var(Petal.Width)
+cat("A variância da largura das pétalas é de",round(var,2),".")
+sd=sd(Petal.Width)
+cat("O desvio-padrão da largura das pétalas é de",round(sd,2),".")
+cv = var/mean*100
+cat("O coeficiente de variação da largura das pétalas é de",round(cv,2),", sendo classificado como muito alto.")
+```
+
+
+### Questão 2 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+dados = read.csv("C:/Users/Maria Nilza/OneDrive/Desktop/biblioteconomia.csv",h=T,sep=";")
+attach(dados)
+```
+
+#### Idade
+```{r,error=T}
+mean=mean(Idade)
+var=var(Idade)
+cat("A variância da faixa etária é de",round(var,2),".")
+sd=sd(Idade)
+cat("O desvio-padrão da faixa etária é de",round(sd,2),".")
+cv = var/mean*100
+cat("O coeficiente de variação da faixa etária é de",round(cv,2),", sendo classificado como baixo.")
+```
+
+
+#### Altura
+```{r}
+mean=mean(Altura)
+var=var(Altura)
+cat("A variância da altura é de",round(var,2),".")
+sd=sd(Altura)
+cat("O desvio-padrão da altura é de",round(sd,2),".")
+cv = var/mean*100
+cat("O coeficiente de variação da altura é de",round(cv,2),", sendo classificado como baixo.")
+```
+
+
+#### CRE
+
+```{r,error=T}
+mean=mean(CRE,na.rm=T)
+var=var(CRE,na.rm=T)
+cat("A variância do CRE é de",round(var,2),".")
+sd=sd(CRE,na.rm=T)
+cat("O desvio-padrão do CRE é de",round(sd,2),".")
+cv = var/mean*100
+cat("O coeficiente de variação do CRE é de",round(cv,2),", sendo classificado como baixo.")
+```

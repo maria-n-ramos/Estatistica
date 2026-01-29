@@ -1,0 +1,268 @@
+---
+title: "Atividade 8"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Questão 1 {.tabset .tabset .tabset}
+```{r, include=F}
+attach(iris)
+require("fdth")
+```
+
+#### a) Calcule e interprete os quartis para cada variável do banco de dados “iris” {.tabset .tabset .tabset .tabset .tabset}
+
+##### Sepal Lenght
+```{r,error=T}
+quantile(Sepal.Length)
+```
+Para Q1 = 5,1: cerca de 25% das sépalas possuem tamanho até 5,1 e os demais possuem tamanhos superiores.
+
+
+Para Q2 = 5,8: cerca de 50% das sépalas possuem tamanho até 5,8 e os demais possuem tamanhos superiores.
+
+
+Para Q3 = 6,4: cerca de 75% das sépalas possuem tamanho até 6,4 e os demais possuem tamanhos superiores.
+
+
+##### Sepal Width
+```{r,error=T}
+quantile(Sepal.Width)
+```
+Para Q1 = 2,8: cerca de 25% das sépalas possuem largura até 2,8 e os demais possuem tamanhos superiores.
+
+
+Para Q2 = 3: cerca de 50% das sépalas possuem largura até 3 e os demais possuem tamanhos superiores.
+
+
+Para Q3 = 3,3: cerca de 75% das sépalas possuem largura até 3,3 e os demais possuem tamanhos superiores.
+
+##### Petal Lenght
+```{r,error=T}
+quantile(Petal.Length)
+```
+Para Q1 = 1,6: cerca de 25% das pétalas possuem tamanho até 1,6 e os demais possuem tamanhos superiores.
+
+
+Para Q2 = 4,35: cerca de 50% das pétalas possuem tamanho até 4,35 e os demais possuem tamanhos superiores.
+
+
+Para Q3 = 5,1: cerca de 75% das pétalas possuem tamanho até 5,1 e os demais possuem tamanhos superiores.
+
+##### Petal Width
+```{r,error=T}
+quantile(Petal.Width)
+```
+Para Q1 = 0,3: cerca de 25% das pétalas possuem largura até 0,3 e os demais possuem tamanhos superiores.
+
+
+Para Q2 = 1,3: cerca de 50% das pétalas possuem largura até 1,3 e os demais possuem tamanhos superiores.
+
+
+Para Q3 = 1,8: cerca de 75% das pétalas possuem largura até 1,8 e os demais possuem tamanhos superiores.
+
+#### b) Calcule e interprete o 6o Decil e o 80o Centil para cada variável do banco de dados “iris” {.tabset .tabset .tabset .tabset .tabset}
+
+##### Sepal Lenght
+```{r,error=T}
+quantile(Sepal.Length, probs = c(0.06,0.8))
+```
+Para o 6o decil = 4,69: têm-se que 6% das sépalas tem comprimento até 4,69.
+
+Para o 80o percentil = 6,52: têm-se que 80% das sépalas tem comprimento até 6,52.
+
+##### Sepal Width
+```{r,error=T}
+quantile(Sepal.Width, probs = c(0.06,0.8))
+```
+Para o 6o decil = 2,4: têm-se que 6% das sépalas tem largura até 2,4.
+
+Para o 80o percentil = 3,4: têm-se que 80% das sépalas tem largura até 3,4.
+
+##### Petal Lenght
+```{r,error=T}
+quantile(Petal.Length, probs = c(0.06,0.8))
+```
+Para o 6o decil = 1,3: têm-se que 6% das pétalas tem comprimento até 1,3.
+
+Para o 80o percentil = 3,52: têm-se que 80% das pétalas tem comprimento até 3,52.
+
+##### Petal Width
+```{r,error=T}
+quantile(Petal.Width, probs = c(0.06,0.8))
+```
+Para o 6o decil = 0,2: têm-se que 6% das pétalas tem largura até 0,2.
+
+Para o 80o percentil = 1,9: têm-se que 80% das pétalas tem largura até 1,9.
+
+#### c) Produza um boxplot para cada variável do banco de dados “iris” e comente sobre a assimetria, dispersão e presença de outliers.{.tabset .tabset .tabset .tabset .tabset}
+
+##### Sepal Lenght
+```{r,error=T}
+Q3=quantile(Sepal.Length,probs=0.75)
+Q1=quantile(Sepal.Length,probs=0.25)
+IQ=Q3-Q1
+cat("Vemos assimetria à direita, com dispersão de",IQ,"e nenhum outlier.")
+boxplot(Sepal.Length,main="Comprimento das Sépalas")
+
+```
+
+
+##### Sepal Width
+```{r,error=T}
+Q3=quantile(Sepal.Width,probs=0.75)
+Q1=quantile(Sepal.Width,probs=0.25)
+IQ=Q3-Q1
+LS=Q3+1.5*IQ
+LI=Q1-1.5*IQ
+OUT = c(Sepal.Width[Sepal.Width < LI],Sepal.Width[Sepal.Width > LS])
+
+cat("Vemos assimetria à direita, com dispersão de",IQ,"e a presença de",length(OUT),"outliers, que são:",OUT)
+boxplot(Sepal.Width,main="Largura das Sépalas")
+
+```
+
+
+##### Petal Lenght
+```{r,error=T}
+Q3=quantile(Petal.Length,probs=0.75)
+Q1=quantile(Petal.Length,probs=0.25)
+IQ=Q3-Q1
+LS=Q3+1.5*IQ
+OUT = Petal.Length[Petal.Length > LS]
+cat("Vemos assimetria à esquerda, com dispersão de",IQ,"e a presença de",length(OUT),"outliers.")
+boxplot(Petal.Length,main="Comprimento das Pétalas")
+```
+
+
+##### Petal Width
+```{r,error=T}
+Q3=quantile(Petal.Width,probs=0.75)
+Q1=quantile(Petal.Width,probs=0.25)
+IQ=Q3-Q1
+LS=Q3+1.5*IQ
+OUT = Petal.Width[Petal.Width > LS]
+cat("Vemos assimetria à esquerda, com dispersão de",IQ,"e a presença de",length(OUT),"outliers.")
+boxplot(Petal.Width,main="Largura das Pétalas")
+
+```
+
+
+
+### Questão 2 {.tabset .tabset .tabset}
+
+```{r, include=F}
+dados = read.csv("C:/Users/Maria Nilza/OneDrive/Desktop/biblioteconomia.csv",h=T,sep=";")
+attach(dados)
+```
+
+#### a) Calcule e interprete os quartis para cada variável do banco de dados “biblioteconomia” {.tabset .tabset .tabset .tabset .tabset}
+
+##### Idade
+```{r,error=T}
+quantile(Idade)
+```
+Para Q1 = 21: cerca de 25% dos alunos possuem até 21 anos.
+
+
+Para Q2 = 21: cerca de 50% dos alunos possuem até 21 anos.
+
+
+Para Q3 = 21,75: cerca de 75% dos alunos possuem até 21 anos e os demais possuem idades superiores.
+
+##### Altura
+```{r}
+quantile(Altura)
+```
+Para Q1 = 1,54: cerca de 25% dos alunos possuem até 1,54m e os demais possuem tamanhos superiores.
+
+
+Para Q2 = 1,59: cerca de 50% dos alunos possuem até 1,59m e os demais possuem tamanhos superiores.
+
+
+Para Q3 = 1,69: cerca de 75% dos alunos possuem até 21,75 anos e os demais possuem tamanhos superiores.
+
+##### CRE
+
+```{r}
+quantile(CRE,na.rm = T)
+```
+Para Q1 = 7,92: cerca de 25% dos alunos possuem até 7,92 no CRE e os demais possuem superiores.
+
+
+Para Q2 = 8,23: cerca de 50% dos alunos possuem até 8,23 no CRE e os demais possuem superiores.
+
+
+Para Q3 = 8,41: cerca de 75% dos alunos possuem até 8,41 no CRE e os demais possuem superiores.
+
+
+#### b) Calcule e interprete o 6o Decil e o 80o Centil para cada variável do banco de dados “biblioteconomia” {.tabset .tabset .tabset .tabset .tabset}
+
+##### Idade
+```{r,error=T}
+quantile(Idade, probs = c(0.06,0.8))
+```
+Para o 6o decil = 20: têm-se que 6% dos alunos tem idade até 20 anos.
+
+Para o 80o percentil = 20: têm-se que 80% dos alunos tem idade até 22,4 anos.
+
+##### Altura
+```{r}
+quantile(Altura, probs = c(0.06,0.8))
+```
+Para o 6o decil = 1,49: têm-se que 6% dos alunos tem altura até 1,49m.
+
+Para o 80o percentil = 1,69: têm-se que 80% dos alunos tem altura até 1,69m.
+
+##### CRE
+
+```{r}
+quantile(CRE, probs = c(0.06,0.8),na.rm=T)
+```
+Para o 6o decil = 7,11: têm-se que 6% dos alunos tem CRE até 7,11.
+
+Para o 80o percentil = 8,43: têm-se que 80% dos alunos tem CRE até 8,43.
+
+#### c) Produza um boxplot para cada variável do banco de dados “biblioteconomia” e comente sobre a assimetria, dispersão e presença de outliers. {.tabset .tabset .tabset .tabset .tabset}
+
+
+##### Idade
+```{r,error=T}
+Q3=quantile(Idade,probs=0.75)
+Q1=quantile(Idade,probs=0.25)
+IQ=Q3-Q1
+LS=Q3+1.5*IQ
+OUT = Idade[Idade > LS]
+cat("Vemos assimetria à direita, com dispersão de",IQ,"e a presença de",length(OUT),"outliers, que são:",OUT)
+boxplot(Idade,main="Idade")
+```
+
+##### Altura
+```{r}
+Q3=quantile(Altura,probs=0.75)
+Q1=quantile(Altura,probs=0.25)
+IQ=Q3-Q1
+LS=Q3+1.5*IQ
+OUT = Altura[Altura > LS]
+cat("Vemos assimetria à direita, com dispersão de",IQ,"e a presença de",length(OUT),"outliers.")
+boxplot(Altura,main="Altura")
+```
+
+##### CRE
+
+```{r}
+CRE2 <- CRE[complete.cases(CRE)]
+Q3=quantile(CRE2,probs=0.75,na.rm=T)
+Q1=quantile(CRE2,probs=0.25,na.rm=T)
+IQ=Q3-Q1
+LI=Q1-1.5*IQ
+OUT = CRE2[CRE2 < LI]
+cat("Vemos assimetria à esquerda, com dispersão de",IQ,"e a presença de",length(OUT),"outlier, que é:",OUT)
+boxplot(CRE2,na.rm=T,main="CRE")
+```
+

@@ -1,0 +1,86 @@
+---
+title: "Atividade 9"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Questão 1 {.tabset .tabset .tabset}
+```{r, include=F}
+attach(iris)
+require(moments)
+```
+
+#### Sepal Lenght
+
+Váriável Sepal Length é assimétrica à direita, platicúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(Sepal.Length,na.rm=T)
+kurtosis(Sepal.Length,na.rm=T)-3
+plot(density(Sepal.Length,na.rm=T),main="Sepal Length")
+```
+
+#### Sepal Width
+
+Váriável Sepal Width é assimétrica à direita, leptocúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(Sepal.Width,na.rm=T)
+kurtosis(Sepal.Width,na.rm=T)-3
+plot(density(Sepal.Width,na.rm=T),main="Sepal Width")
+```
+
+#### Petal Lenght
+
+Váriável Petal Length é assimétrica à esquerda, leptocúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(Petal.Length,na.rm=T)
+kurtosis(Petal.Length,na.rm=T)-3
+plot(density(Petal.Length,na.rm=T),main="Petal Length")
+```
+
+#### Petal Width
+
+Váriável Petal Width é assimétrica à esquerda, leptocúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(Petal.Width,na.rm=T)
+kurtosis(Petal.Width,na.rm=T)-3
+plot(density(Petal.Width,na.rm=T),main="Petal Width")
+```
+
+### Questão 2 {.tabset .tabset .tabset}
+
+```{r, include=F}
+dados = read.csv("C:/Users/Maria Nilza/OneDrive/Desktop/biblioteconomia.csv",h=T,sep=";")
+attach(dados)
+```
+
+#### Idade
+
+Váriável Idade é assimétrica à direita, platicúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(Idade)
+kurtosis(Idade)-3
+plot(density(Idade),main="Idade")
+```
+
+#### Altura
+
+Váriável Altura é assimétrica à direita, platicúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(Altura)
+kurtosis(Altura)-3
+plot(density(Altura),main="Altura")
+```
+
+#### CRE
+
+Váriável CRE é assimétrica à esquerda, platicúrtica e possui a seguinte densidade:
+```{r,error=T}
+skewness(CRE,na.rm=T)
+kurtosis(Altura,na.rm=T)-3
+plot(density(Altura,na.rm=T),main="CRE")
+```

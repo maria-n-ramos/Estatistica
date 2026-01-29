@@ -1,0 +1,137 @@
+---
+title: "Atividade 6"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require("prettyR")
+```
+
+### Questão 1 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+attach(iris)
+require("fdth")
+```
+
+#### Sepal Lenght
+```{r,error=T}
+mean=mean(Sepal.Length)
+cat("A média do comprimento das sépalas é de",round(mean,2),".")
+mean=median(Sepal.Length)
+cat("Metade dos valores do comprimento das Sépalas estão abaixo de",round(mean,2),".")
+mean=Mode(Sepal.Length)
+cat("O valor mais frequente do comprimento de sépalas é",mean,".")
+```
+
+
+#### Sepal Width
+```{r,error=T}
+mean=mean(Sepal.Width)
+cat("A média da largura das sépalas é de",round(mean,2),".")
+mean=median(Sepal.Width,na.rm=T)
+cat("Metade dos valores da largura das Sépalas estão abaixo de",round(mean,2),".")
+mean=Mode(Sepal.Width)
+cat("O valor mais frequente da largura de sépalas é",mean,".")
+```
+
+
+#### Petal Lenght
+```{r,error=T}
+mean=mean(Petal.Length)
+cat("A média do comprimento das pétalas é de",round(mean,2),".")
+mean=median(Petal.Length,na.rm=T)
+cat("Metade dos valores do comprimento das pétalas estão abaixo de",round(mean,2),".")
+mean=Mode(Petal.Length)
+cat("A variável comprimento das pétalas é multimodal.")
+```
+
+
+#### Petal Width
+```{r,error=T}
+mean=mean(Petal.Width)
+cat("A média da largura das pétalas é de",round(mean,2),".")
+mean=median(Petal.Width)
+cat("Metade dos valores da largura das pétalas estão abaixo de",round(mean,2),".")
+mean=Mode(Petal.Width)
+cat("O valor mais frequente da largura de pétalas é",mean,".")
+```
+
+
+#### Species
+```{r}
+mean=Mode(Species)
+cat("A variável espécies é multimodal.")
+```
+
+
+
+
+### Questão 2 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+dados = read.csv("C:/Users/Maria Nilza/OneDrive/Desktop/biblioteconomia.csv",h=T,sep=";")
+attach(dados)
+```
+#### Sexo
+```{r}
+mean=Mode(Sexo)
+cat("A variável sexo possui",mean,"como o valor mais frequente.")
+```
+
+
+#### Idade
+```{r,error=T}
+mean=mean(Idade)
+cat("A faixa etária média é de",round(mean,2),"anos.")
+mean=median(Idade)
+cat("Metade dos alunos possuem idade até",round(mean,2),"anos.")
+mean=Mode(Idade)
+cat("A idade mais frequente é",mean,".")
+```
+
+
+#### Altura
+```{r}
+mean=mean(Altura)
+cat("A média da altura dos alunos é de",round(mean,2),"metros.")
+mean=median(Altura)
+cat("Metade dos alunos possuem altura até",round(mean,2),"metros.")
+mean=Mode(Altura)
+cat("A variável altura é multimodal.")
+```
+
+
+#### Classe Social
+```{r}
+mean=Mode(Classe_Social)
+cat("A variável a respeito da classe social possui como valor mais frequente:",mean,".")
+```
+
+
+#### Escola
+```{r}
+mean=Mode(Escola)
+cat("A variável escola possui como valor mais frequente:",mean,".")
+
+```
+
+
+#### CRE
+
+```{r,error=T}
+mean=mean(CRE,na.rm=T)
+cat("Os alunos possuem em média cRE igual a",round(mean,2),".")
+mean=median(CRE,na.rm=T)
+cat("50% dos alunos possuem CRE até",round(mean,2),".")
+mean=Mode(CRE,na.rm=T)
+cat("O CRE é multimodal.")
+```
+
+
+#### Ingresso
+```{r}
+mean=Mode(Ingresso)
+cat("O modo de ingresso mais frequente é:",mean,".")
+```

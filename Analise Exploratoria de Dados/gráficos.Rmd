@@ -1,0 +1,171 @@
+---
+title: "Atividade 4"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Questão 1 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+attach(iris)
+require("fdth")
+```
+
+#### Sepal Lenght
+```{r,error=T}
+df1=fdt(Sepal.Length, start = 4.3, end = 8.2, h = 0.3)
+
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma do Comprimento das Sépalas")
+text(x=c(4.4,4.7,5,5.38,5.6,5.99,6.2,6.6,6.8,7.2,7.45,7.8,8.1),
+     y=c(6,13,27,13,23,17,21,16,17,7,3,6,2),pos=3,paste(fi1,"%"), cex=0.7)
+
+```
+
+
+#### Sepal Width
+```{r,error=T}
+df1=fdt(Sepal.Width, start = 2, end = 4.6, h = 0.2)
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma da Largura das Sépalas")
+text(x=c(2.05,2.25,2.45,2.65,2.85,3.05,3.25,3.45,3.65,3.85,4.05,4.25,4.45),y=c(2,9,12,14,26,37,32,6,7,8,2,1,1),pos=3,paste(fi1,"%"), cex=0.7)
+
+```
+
+
+#### Petal Lenght
+```{r,error=T}
+df1=fdt(Petal.Length, start = 1, end = 7, h = 0.5)
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma do Comprimento das Pétalas")
+text(x=c(1.1,1.6,2.1,2.6,3.1,3.6,4.1,4.6,5.1,5.6,6.1,6.6),
+     y=c(25,27,0,0,4,9,21,25,21,20,8,5),pos=3,paste(fi1,"%"), cex=0.7)
+
+```
+
+
+#### Petal Width
+```{r,error=T}
+df1=fdt(Petal.Width, start = 0.1, end = 2.7, h = 0.2 )
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma da Largura das Pétalas")
+text(x=c(0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2,2.2,2.4,2.6),
+     y=c(41,9,3,0,8,21,20,6,19,6,19,6,0),pos=3,paste(fi1,"%"), cex=0.7)
+
+```
+
+
+#### Species
+```{r}
+v=fdt_cat(Species)
+(var=v$Category)
+ni = v$f
+fi = round(v$`rf(%)`,2)
+rotulos = paste(var,"(",fi,"%)",sep=" ")
+pie(ni,col = c("violet","pink","cyan"),label=rotulos,clockwise=T)
+```
+
+
+
+
+### Questão 2 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+dados = read.csv("C:/Users/Maria Nilza/OneDrive/Desktop/biblioteconomia.csv",h=T,sep=";")
+attach(dados)
+```
+#### Sexo
+```{r}
+v=fdt_cat(Sexo)
+(var=v$Category)
+ni = v$f
+fi = round(v$`rf(%)`,2)
+rotulos = paste(var,"(",fi,"%)",sep=" ")
+pie(ni,col = c("pink","cyan"),label=rotulos,clockwise=T)
+```
+
+
+#### Idade
+```{r,error=T}
+df1=fdt(Idade, start = 20, end = 26, h = 2)
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma da Idade")
+text(x=c(21,23,25),y=c(7,1,2),pos=3,paste(fi1,"%"), cex=0.7)
+```
+
+
+#### Altura
+```{r}
+df1=fdt(Altura, start = 1.47, end = 1.79, h = 0.08)
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma da Altura")
+text(x=c(1.5,1.58,1.65,1.74),y=c(3,3,3,1),pos=3,paste(fi1,"%"), cex=0.7)
+```
+
+
+#### Classe Social
+```{r}
+v=fdt_cat(Classe_Social)
+var=v$Category
+ni = v$f
+fi = round(v$`rf(%)`,2)
+rotulos = paste(var,"(",fi,"%)",sep=" ")
+pie(ni,col = c("pink","cyan","violet"),label=rotulos,clockwise=T)
+```
+
+
+#### Escola
+```{r}
+v=fdt_cat(Escola)
+var=v$Category
+ni = v$f
+fi = round(v$`rf(%)`,2)
+rotulos = paste(var,"(",fi,"%)",sep=" ")
+pie(ni,col = c("pink","cyan"),label=rotulos,clockwise=T)
+
+```
+
+
+#### CRE
+
+```{r}
+df1=fdt(CRE, start = 7, end = 9.56, h = 0.64)
+ni1 = df1$table$f
+fi1 = round(df1$table$'rf(%)',2)
+k1 = length(fi1)
+
+plot(df1, main = "Histograma do CRE")
+text(pos=3,paste(fi1,"%"), cex=0.7,x=c(7.2,7.84,8.48,9.12),y=c(2,4,2,1))
+```
+
+
+#### Ingresso
+```{r}
+v=fdt_cat(Ingresso)
+var=v$Category
+ni = v$f
+fi = round(v$`rf(%)`,2)
+rotulos = paste(var,"(",fi,"%)",sep=" ")
+pie(ni,col = c("pink","cyan"),label=rotulos,clockwise=T)
+```

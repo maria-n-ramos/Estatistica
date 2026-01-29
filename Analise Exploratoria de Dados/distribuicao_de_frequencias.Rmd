@@ -1,0 +1,122 @@
+---
+title: "Atividade 4"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Questão 1 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+attach(iris)
+require("fdth")
+```
+
+#### Sepal Lenght
+```{r}
+(fdt(Sepal.Length, start = 4.3, end = 8.2, h = 0.3))
+```
+Comentário: 
+
+O comprimento das sépalas entre 4,3 e 4,6 centímetros representam 3,33% do total analisado.
+
+As sépalas com comprimento entre 4,3 e 6,7 centímetros representam 81,33%.
+
+#### Sepal Width
+```{r}
+(fdt(Sepal.Width, start = 2, end = 4.6, h = 0.2))
+```
+Comentário:
+
+4% das sépalas possuem largura entre 3,4 e 3,6 centímetros, além de que cerca de 84% possuem largura entre 2 e 3,6 centímetros.
+
+#### Petal Lenght
+```{r,error=T}
+(fdt(Petal.Length, start = 1, end = 7, h = 0.5))
+```
+Comentário:
+
+As pétalas com comprimentos entre 5 e 5,5 centímetros no conjunto de dados estão em torno de 12%.
+
+As pétalas com comprimentos entre 1 e 5,7 centímetros somam 100%, sendo assim nenhuma chegou a 6 cm.
+
+#### Petal Width
+```{r}
+(fdt(Petal.Width, start = 0.1, end = 2.7, h = 0.2 ))#k=13
+```
+Comentário:
+
+As pétalas com largura entre 0,1 e 0,3 cm somam 27,33% do todo, enquanto de 0,1 à 0,5 cm somam 32%.
+
+#### Species
+Utilizando k = 6, e com amplitude 23.3 - 4
+```{r}
+(fdt_cat(Species))
+```
+33,33% das Íris são da espécie setosa e 66,67% são de setosas e versincolor.
+
+
+### Questão 2 {.tabset .tabset .tabset .tabset .tabset}
+```{r, include=F}
+dados = read.csv("C:/Users/Maria Nilza/OneDrive/Desktop/biblioteconomia.csv",h=T,sep=";")
+attach(dados)
+```
+#### Sexo
+```{r}
+(fdt_cat(Sexo))
+```
+Comentário:
+
+80% das pessoas que fazem empréstimos na biblioteca são do sexo feminino e 100% do sexo feminino e masculino.
+
+#### Idade
+```{r}
+(fdt(Idade, start = 20, end = 26, h = 2))#k=4 A=24-20 h=1 é insuficiente, então farei h = 2 e k = 3 por fins visuais
+```
+Comentário:
+
+10% das pessoas que fazem empréstimos na biblioteca possuem idade entre 20 e 22 anos, e 80% possuem entre 20 e 24 anos.
+
+#### Altura
+```{r}
+(fdt(Altura, start = 1.47, end = 1.79, h = 0.08))
+```
+Comentário:
+
+40% das pessoas que fazem empréstimos na biblioteca possuem altura entre 1,55 e 1,63 metros, e 60% possuem entre 1,55 e 1,71 metros.
+
+#### Classe Social
+```{r}
+(fdt_cat(Classe_Social))
+```
+Comentário:
+
+60% das pessoas que fazem empréstimos na biblioteca pertencem a classe média, e 80% a classe alta e média.
+
+#### Escola
+```{r}
+(fdt_cat(Escola))
+```
+Comentário:
+
+20% das pessoas que fazem empréstimos na biblioteca vieram do ensino privado, e 100% do ensino público e privado.
+
+#### CRE
+
+```{r}
+(fdt(CRE, start = 7, end = 9.56, h = 0.64))
+```
+Comentário:
+
+40% das pessoas que fazem empréstimos na biblioteca possuem CRE entre 7.64 e 8.28, e 80% entre 7 e 8.92.
+
+#### Ingresso
+```{r}
+(fdt_cat(Ingresso))
+```
+Comentário:
+
+40% das pessoas que fazem empréstimos na biblioteca ingressaram via ENEM, e 100% via ENEM e PSC.
