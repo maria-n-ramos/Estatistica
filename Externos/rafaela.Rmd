@@ -1,0 +1,75 @@
+---
+title: "Cálculo da Amostra pra Rafaela"
+output: html_notebook
+---
+# - Tamanho Amostral para cada município da Regional Purus
+
+Seguindo cálculos da página 117 com as seguinte alterações em:
+
+Confiança = 90%
+Significância = 10%
+Precisão = 10%
+Média pelo máximo = 4000
+
+```{r}
+# Definindo a função para calcular a amostra
+calc_amostra <- function(N, p=0.5, d=0.1, z=qnorm(0.90)) {
+  numerador <- N * (z^2) * p * (1 - p)
+  denominador <- (d^2 * (N - 1)) + (z^2 * p * (1 - p))
+  n <- numerador / denominador
+  return(ceiling(n))
+}
+
+# Populações dos municípios
+populacoes <- c(Boca_do_Acre = 35447, Canutama = 16869, Labrea = 45448, Pauini = 19373, Tapaua = 19599)
+
+# Calculando as amostras
+amostras <- sapply(populacoes/4000, calc_amostra)
+
+# Exibindo os resultados
+print(amostras)
+
+```
+Para um nível de confiança de 90%, precisão de 10%, probabilidade 0.5 (prevalência esperada de cobertura) e assumindo que cada equipe de Saúde da Família deve ser responsável por, no máximo, 4.000 pessoas, e pelo que vemos costuma operar por volta do limite máximo, ou até mesmo ultrapassando. Divide-se por 4000 e temos o resultado mostrado no código anterior, resultando em:
+
+
+```{r}
+amostra <- data.frame(Boca_do_Acre = 8, Canutama = 3, Labrea = 10, Pauini = 3, Tapaua = 5)
+cat("Amostras mínimas com os pressupostos estabelecidos:\n")
+amostra
+```
+
+# - Tamanho Amostral para cada município da Regional Juruá
+
+Seguindo cálculos da página 117 com as seguinte alterações em:
+
+Confiança = 90%
+Significância = 10%
+Precisão = 10%
+Média pelo máximo = 4000
+
+```{r}
+# Definindo a função para calcular a amostra
+calc_amostra <- function(N, p=0.5, d=0.1, z=qnorm(0.90)) {
+  numerador <- N * (z^2) * p * (1 - p)
+  denominador <- (d^2 * (N - 1)) + (z^2 * p * (1 - p))
+  n <- numerador / denominador
+  return(ceiling(n))
+}
+
+# Populações dos municípios
+populacoes <- c(Carauari = 28742, Eirunepe = 33170, Envira = 17186, Guajarra = 13815, Ipixuna = 24311,Itamarati=10937)
+
+# Calculando as amostras
+amostras <- sapply(populacoes/4000, calc_amostra)
+
+# Exibindo os resultados
+print(amostras)
+```
+
+```{r}
+amostra <- data.frame(Carauari = 4, Eirunepe = 8, Envira = 4, Guajarra = 4, Ipixuna = 4,Itamarati=3)
+cat("Amostras mínimas com os pressupostos estabelecidos:\n")
+amostra
+```
+

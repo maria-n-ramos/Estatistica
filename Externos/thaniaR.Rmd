@@ -1,0 +1,421 @@
+---
+title: "Questionário dos Municípios"
+author: "Maria Nilza Ramos"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+df <- read_excel("C:/Users/Maria Nilza/Downloads/quest (1).xlsx")
+#View(df)
+```
+## Perfil dos Coordenadores
+
+```{r}
+# Calcular as frequências e porcentagens
+df_frequencia <- df %>%
+  group_by(`Gênero?`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+# Gráfico de pizza com porcentagens
+ggplot(df_frequencia, aes(x = "", y = Count, fill = `Gênero?`)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5)) +
+  theme_void() +
+  labs(title = "Distribuição por Gênero") +
+  theme(legend.position = "right")
+# Exibir a tabela de frequências e porcentagens
+print(df_frequencia)
+
+```
+
+```{r}
+# Calcular as frequências e porcentagens para Raça/Cor
+df_raca_frequencia <- df %>%
+  group_by(`Raça/Cor`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Gráfico de pizza com porcentagens para Raça/Cor
+ggplot(df_raca_frequencia, aes(x = "", y = Count, fill = `Raça/Cor`)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5)) +
+  theme_void() +
+  labs(title = "Distribuição por Raça/Cor") +
+  theme(legend.position = "right")
+# Exibir a tabela de frequências e porcentagens para Raça/Cor
+print(df_raca_frequencia)
+
+```
+
+```{r}
+# Calcular as frequências e porcentagens para Faixa etária
+df_faixa_etaria_frequencia <- df %>%
+  group_by(`Faixa etária`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Gráfico de pizza com porcentagens para Faixa etária
+ggplot(df_faixa_etaria_frequencia, aes(x = "", y = Count, fill = `Faixa etária`)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5)) +
+  theme_void() +
+  labs(title = "Distribuição por Faixa Etária") +
+  theme(legend.position = "right")
+# Exibir a tabela de frequências e porcentagens para Faixa etária
+print(df_faixa_etaria_frequencia)
+
+```
+
+
+```{r}
+library(gridExtra)
+df_count <- df %>%
+  group_by(`Gênero?`, `Faixa etária`) %>%
+  summarise(Count = n()) %>%
+  ungroup()
+
+# Filtrar dados por gênero
+df_feminino <- df_count %>% filter(`Gênero?` == "Feminino")
+df_masculino <- df_count %>% filter(`Gênero?` == "Masculino")
+
+# Definir um vetor de cores consistente para as faixas etárias
+colors <- c("20 a 30 anos" = "#F8766D", "30 a 40 anos" = "#7CAE00",
+            "40 a 50 anos" = "#00BFC4", "mais de 50 anos" = "#C77CFF")
+
+# Gráfico de pizza para Faixa Etária - Feminino (com legenda)
+grafico_feminino <- ggplot(df_feminino, aes(x = "", y = Count, fill = `Faixa etária`)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  scale_fill_manual(values = colors) +
+  theme_void() +
+  labs(title = "Feminino") +
+  theme(legend.position = "bottom")
+
+# Gráfico de pizza para Faixa Etária - Masculino (sem legenda)
+grafico_masculino <- ggplot(df_masculino, aes(x = "", y = Count, fill = `Faixa etária`)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  scale_fill_manual(values = colors) + # Aplicar as mesmas cores
+  theme_void() +
+  labs(title = "Masculino") +
+  theme(legend.position = "none") # Remove a legenda
+
+# Arranjar os gráficos lado a lado
+grid.arrange(grafico_feminino, grafico_masculino, ncol = 2)
+```
+
+## Formação
+
+```{r}
+# Análise descritiva de "Tempo de formado"
+tempo_formado_descritiva <- df %>%
+  group_by(`Tempo de formado`) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+print("Análise Descritiva de Tempo de Formado:")
+print(tempo_formado_descritiva)
+
+# Análise descritiva de "Em qual instituição formou?"
+instituicao_formou_descritiva <- df %>%
+  group_by(`Em qual instituição formou?`) %>%
+  summarise(Count = n()) %>%
+  arrange(desc(Count))
+
+print("Análise Descritiva de Em qual instituição formou?:")
+print(instituicao_formou_descritiva)
+```
+
+```{r}
+grafico_tempo_formado <- ggplot(df, aes(x = `Tempo de formado`)) +
+  geom_bar(fill = "lightblue") +
+  theme_minimal() +
+  labs(title = "Distribuição de Tempo de Formado", x = "Tempo de Formado", y = "Contagem") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Gráfico de barras para "Em qual instituição formou?"
+grafico_instituicao_formou <- ggplot(df, aes(x = `Em qual instituição formou?`)) +
+  geom_bar(fill = "lightgreen") +
+  theme_minimal() +
+  labs(title = "Distribuição de Instituição de Formação", x = "Instituição de Formação", y = "Contagem") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Gráfico combinado: Tempo de Formado vs Instituição de Formação
+grafico_tempo_instituicao <- ggplot(df, aes(x = `Tempo de formado`, fill = `Em qual instituição formou?`)) +
+  geom_bar(position = "dodge") +
+  theme_minimal() +
+  labs(title = "Tempo de Formado vs Instituição de Formação", x = "Tempo de Formado", y = "Contagem", fill = "Instituição") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Exibir os gráficos
+print(grafico_tempo_formado)
+#print(grafico_instituicao_formou)
+#print(grafico_tempo_instituicao)
+```
+
+```{r}
+df_filtrado <- df %>% filter(!is.na(`Em qual instituição formou?`))
+
+df_instituicao_percent <- df_filtrado %>%
+  group_by(`Em qual instituição formou?`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Gráfico de barras com porcentagens acima para "Em qual instituição formou?"
+grafico_instituicao <- ggplot(df_instituicao_percent, aes(x = `Em qual instituição formou?`, y = Count, fill = `Em qual instituição formou?`)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), vjust = -0.5) +
+  theme_minimal() +
+  labs(title = "Distribuição por Instituição de Formação", 
+       x = "Instituição de Formação", 
+       y = "Número de Coordenadores") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Exibir o gráfico
+print(grafico_instituicao)
+# Calcular as contagens e porcentagens
+df_percent <- df_filtrado %>%
+  group_by(`Tempo de formado`, `Em qual instituição formou?`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Gráfico combinado: Tempo de Formado vs Instituição de Formação com porcentagens
+grafico_tempo_instituicao <- ggplot(df_percent, aes(x = `Tempo de formado`, y = Count, fill = `Em qual instituição formou?`)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
+            position = position_dodge(width = 0.9), vjust = -0.5) +
+  theme_minimal() +
+  labs(title = "Tempo de Formado vs Instituição de Formação", 
+       x = "Tempo de Formado", 
+       y = "Contagem", 
+       fill = "Instituição") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Exibir os gráficos
+print(grafico_tempo_instituicao)
+
+```
+ qnd deixamos de olhar o NA da instituricao podemos comparar com o tempo de formado e ver uma crescente das privadas
+ 
+ 
+## Perfil de Profissional
+
+```{r}
+df_percent <- df %>%
+  group_by(`Possui Pós-Graduação?`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Gráfico de barras com porcentagens acima
+grafico_pos_graduacao <- ggplot(df_percent, aes(x = `Possui Pós-Graduação?`, y = Count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), vjust = -0.5) +
+  theme_minimal() +
+  labs(title = "Distribuição de Coordenadores com Pós-Graduação", 
+       x = "Possui Pós-Graduação?", 
+       y = "Número de Coordenadores") +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1))
+
+# Exibir o gráfico
+print(grafico_pos_graduacao)
+```
+ 
+```{r}
+# Calcular as porcentagens
+df_percent <- df %>%
+  group_by(`Há experiência anteriores em outros municípios?`) %>%
+  summarise(Count = n()) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+# Gráfico de barras com porcentagens acima
+grafico_experiencia <- ggplot(df_percent, aes(x = `Há experiência anteriores em outros municípios?`, y = Count)) +
+  geom_bar(stat = "identity", fill = "cornflowerblue") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), vjust = -0.5) +
+  theme_minimal() +
+  labs(title = "Distribuição de Coordenadores com Experiência em Outros Municípios", 
+       x = "Há Experiência Anterior?", 
+       y = "Número de Coordenadores") +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1))
+
+# Exibir o gráfico
+print(grafico_experiencia)
+```
+
+
+## Vínculos
+
+```{r}
+tabela_contingencia <- table(df$`Tempo de atuação no município?`, df$`Qual tipo de vínculo empregatício?`)
+
+# Exibir a tabela de contingência
+print(tabela_contingencia)
+```
+
+```{r}
+# Gráfico de barras agrupadas para visualizar a associação
+grafico_agrupado <- ggplot(df, aes(x = `Tempo de atuação no município?`, fill = `Qual tipo de vínculo empregatício?`)) +
+  geom_bar(position = "dodge") +  # "dodge" coloca as barras lado a lado
+  theme_minimal() +
+  labs(title = "Associação entre Tempo de Atuação no Município e Tipo de Vínculo Empregatício", 
+       x = "Tempo de Atuação no Município", 
+       y = "Contagem", 
+       fill = "Tipo de Vínculo Empregatício") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Exibir o gráfico
+print(grafico_agrupado)
+
+```
+
+
+## COVID
+
+```{r}
+# Contar o total de respostas e o número de "Sim"
+total_respostas <- nrow(df)
+total_sim <- df %>% filter(`Houve alterações no processo de trabalho das equipes de saúde bucal após o surgimento da pandemia?` == "Sim") %>% nrow()
+
+# Calcular a porcentagem de "Sim"
+percentual_sim <- (total_sim / total_respostas) * 100
+
+# Exibir o resultado
+percentual_sim
+```
+
+
+```{r}
+# Filtrar os municípios que responderam "Sim" e atribuir microrregiões
+municipios_por_microrregiao <- df %>%
+  filter(`Houve alterações no processo de trabalho das equipes de saúde bucal após o surgimento da pandemia?` == "Sim") %>%
+  mutate(
+    Microrregiao = case_when(
+      `Atua em que município?` %in% c("Autazes", "Barcelos", "Careiro", "Careiro da Várzea", "Iranduba", "Manaquiri", "Manaus", "Nova Olinda do Norte", "Presidente Figueiredo", "Rio Preto da Eva", "Santa Isabel do Rio Negro", "São Gabriel da Cachoeira") ~ "Manaus, Entorno e Alto Rio Negro",
+      `Atua em que município?` %in% c("Parintins", "Maués", "Nhamundá", "Boa Vista do Ramos", "Barreirinha") ~ "Baixo Amazonas",
+      `Atua em que município?` %in% c("Amaturá", "Atalaia do Norte", "Benjamin Constant", "Fonte Boa", "Jutaí", "Santo Antônio do Içá", "São Paulo de Olivença", "Tonantins", "Tabatinga") ~ "Alto Solimões",
+      `Atua em que município?` %in% c("Itacoatiara", "Itapiranga", "São Sebastião do Uatuma", "Silves", "Urucará", "Urucurituba") ~ "Médio Amazonas",
+      `Atua em que município?` %in% c("Anori", "Manacapuru", "Novo Airão", "Anamã", "Beruri", "Caapiranga", "Coari", "Codajás") ~ "Rio Negro e Solimões",
+      `Atua em que município?` %in% c("Tefé", "Japurá", "Maraã", "Juruá", "Uarini", "Alvarães") ~ "Triângulo",
+      `Atua em que município?` %in% c("Apuí", "Borba", "Humaitá", "Manicoré", "Novo Aripuanã") ~ "Madeira",
+      `Atua em que município?` %in% c("Boca do Acre", "Canutama", "Lábrea", "Pauini", "Tapauá") ~ "Purus",
+      `Atua em que município?` %in% c("Carauari", "Eirunepé", "Envira", "Guajará", "Ipixuna", "Itamarati") ~ "Rio Juruá"
+    )
+  ) %>%
+  group_by(Microrregiao) %>%
+  summarise(Municipios = paste(`Atua em que município?`, collapse = ", "))
+
+# Exibir o resultado
+print(municipios_por_microrregiao)
+```
+
+
+
+```{r,error=TRUE}
+
+# Primeiro, vamos criar o dataframe original 'df' que contém as respostas dos municípios
+# e as microrregiões já definidas.
+df <- df %>% mutate(
+  Microrregiao = case_when(
+    `Atua em que município?` %in% c("Amaturá", "Atalaia do Norte", "Benjamin Constant", "Fonte Boa", "Jutaí", "Santo Antônio do Içá", "São Paulo de Olivença", "Tabatinga", "Tonantins") ~ "Alto Solimões",
+    `Atua em que município?` %in% c("Apuí", "Borba", "Humaitá", "Manicoré", "Novo Aripuanã") ~ "Madeira",
+    `Atua em que município?` %in% c("Autazes", "Barcelos", "Careiro", "Careiro da Várzea", "Iranduba", "Manaquiri", "Manaus", "Nova Olinda do Norte", "Presidente Figueiredo", "Rio Preto da Eva", "Santa Isabel do Rio Negro", "São Gabriel da Cachoeira") ~ "Manaus, Entorno e Alto Rio Negro",
+    `Atua em que município?` %in% c("Itacoatiara", "Itapiranga", "São Sebastião do Uatuma", "Silves", "Urucará", "Urucurituba") ~ "Médio Amazonas",
+    `Atua em que município?` %in% c("Boca do Acre", "Canutama", "Lábrea", "Pauini", "Tapauá") ~ "Purus",
+    `Atua em que município?` %in% c("Carauari", "Eirunepé", "Envira", "Guajará", "Ipixuna", "Itamarati") ~ "Rio Juruá",
+    `Atua em que município?` %in% c("Anamã", "Anori", "Beruri", "Caapiranga", "Coari", "Codajás", "Manacapuru", "Novo Airão") ~ "Rio Negro e Solimões",
+    `Atua em que município?` %in% c("Alvarães", "Japurá", "Juruá", "Maraã", "Tefé", "Uarini") ~ "Triângulo"
+  )
+)
+
+# Contar o total de municípios por microrregião no dataframe df
+total_municipios_df <- df %>%
+  group_by(Microrregiao) %>%
+  summarise(Total_Municipios_DF = n_distinct(`Atua em que município?`))
+
+# Contar quantos municípios responderam "Sim" na pergunta sobre alterações no processo de trabalho
+municipios_com_alteracoes <- df %>%
+  filter(`Houve alterações no processo de trabalho das equipes de saúde bucal após o surgimento da pandemia?` == "Sim") %>%
+  group_by(Microrregiao) %>%
+  summarise(Municipios_Com_Alteracoes = n_distinct(`Atua em que município?`))
+
+# Juntar as tabelas para criar a tabela final
+tabela_comparativa <- total_municipios_df %>%
+  left_join(municipios_com_alteracoes, by = "Microrregiao") %>%
+  mutate(
+    Municipios_Com_Alteracoes = replace_na(Municipios_Com_Alteracoes, 0), # Substituir NAs por 0
+    Proporcao = Municipios_Com_Alteracoes / Total_Municipios_DF
+  )
+
+# Exibir a tabela comparativa
+tabela_comparativa
+
+```
+
+```{r}
+library(ggplot2)
+
+# Dados de satisfação
+satisfacao <- data.frame(
+  Categoria = c("Muito satisfeito(a)", "Mais ou menos satisfeito(a)", "Mais ou menos insatisfeito(a)", "Muito insatisfeito(a)"),
+  Count = c(10, 4, 1, 1)
+)
+
+# Calcular as porcentagens
+satisfacao$Percentage <- (satisfacao$Count / sum(satisfacao$Count)) * 100
+
+# Gráfico de pizza com porcentagens
+ggplot(satisfacao, aes(x = "", y = Count, fill = Categoria)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5)) +
+  theme_void() +
+  labs(title = "Grau de Satisfação")
+
+```
+
+
+```{r}
+library(ggplot2)
+
+# Dados de satisfação
+satisfacao <- data.frame(
+  Categoria = c("Muito satisfeito(a)", "Mais ou menos satisfeito(a)", "Mais ou menos insatisfeito(a)", "Muito insatisfeito(a)"),
+  Count = c(10, 4, 1, 1)
+)
+
+# Calcular as porcentagens
+satisfacao$Percentage <- (satisfacao$Count / sum(satisfacao$Count)) * 100
+
+# Ordenar os dados pela porcentagem (do maior para o menor)
+satisfacao <- satisfacao[order(-satisfacao$Percentage), ]
+
+# Definir cores (mais forte para menos forte)
+cores <- c("#4C72B0", "#55A868", "#C44E52", "#DD8452")
+
+# Gráfico de pizza com porcentagens
+ggplot(satisfacao, aes(x = "", y = Count, fill = Categoria)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = pi/4) +  # Inicia o gráfico do eixo de 270 graus
+  geom_text(aes(label = paste0(round(Percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), color = "white") +
+  scale_fill_manual(values = cores) +
+  theme_void() +
+  labs(title = "Grau de Satisfação")
+
+```
+
